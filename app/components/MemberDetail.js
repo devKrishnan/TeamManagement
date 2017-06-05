@@ -166,7 +166,6 @@ class MemberDetail extends Component {
     )
   }
   handleOnPress(value){
-    debugger
     this.setState({ role: value })
   }
   renderActionSection () {
