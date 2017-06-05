@@ -1,6 +1,8 @@
 import rootReducer from './reducer'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
-export default function configureStore() {
+function configureStore() {
   let store = createStore(rootReducer)
   return store
 }
+
+export const store = configureStore()

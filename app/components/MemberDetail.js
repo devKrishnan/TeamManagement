@@ -194,7 +194,7 @@ class MemberDetail extends Component {
     }
   }
   handleDelete () {
-    this.props.handleDelete && this.props.handleDelete()
+    this.props.handleDelete && this.props.handleDelete(this.props.index)
     Actions.pop()
   }
   handleClose () {

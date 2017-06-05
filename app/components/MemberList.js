@@ -16,6 +16,9 @@ import Separator from './Separator'
 import { Actions } from 'react-native-router-flux'
 import { showMembers, deleteMember, editMember, addMember }  from './../actions'
 import { connect } from 'react-redux'
+import { store } from './../store.js'
+store.dispatch(addMember({firstName:'fName',lastName:'lastName',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'default'}))
+store.dispatch(addMember({firstName:'First',lastName:'last',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'admin'}))
 
 const styles = StyleSheet.create({
 	container: {
@@ -52,6 +55,13 @@ class MemberList extends Component {
 	componentDidMount () {
 		this.addMemberDummy()
 	}
+	componentWillReceiveProps (nextProps) {
+    if (nextProps.members !== this.props.members) {
+			this.setState({
+				dataSource: this.state.dataSource.cloneWithRows(nextProps.members)
+			})
+    }
+  }
   render (){
     return (
 			<View style={ styles.container }>
@@ -101,44 +111,29 @@ class MemberList extends Component {
 		Actions.detail( { memberDetails: '', handleSave: this.handleSave })
 	}
 	handleDelete (index) {
-		const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-		let { members } = this.state
-		members.splice(index, 1)
-		this.setState({
-			members,
-			dataSource: dataSource.cloneWithRows(members)
-		})
+		this.props.deleteMember(Number(index))
 	}
 	handleSave (member, index) {
-		alert(index)
 		if (index) {
-			const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-			 this.props.addMember(member)
-			this.setState({
-				dataSource: dataSource.cloneWithRows(this.props.members)
-			})
+			this.props.editMember(member, Number(index))
 		}else{
-			const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
 			this.props.addMember(member)
-			this.setState({
-				dataSource: dataSource.cloneWithRows(this.props.members),
-			})
 		}
 	}
 	addMemberDummy () {
 		const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		this.props.addMember({firstName:'fName',lastName:'lastName',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'default'})
-		this.props.addMember({firstName:'First',lastName:'last',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'admin'})
-		//this.setState({dataSource: dataSource.cloneWithRows(this.props.members)})
+
+		this.setState({dataSource: dataSource.cloneWithRows(this.props.members)})
 	}
 }
 function mapStateToProps(state) {
-	debugger
     return { members: state.members }
 }
 function mapDispatchToProps(dispatch) {
   return {
-    addMember: (member) => dispatch(addMember(member))
+    addMember: (member) => dispatch(addMember(member)),
+		editMember: (member, index) => dispatch(editMember(member, index)),
+		deleteMember: index => dispatch(deleteMember(index)),
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MemberList)

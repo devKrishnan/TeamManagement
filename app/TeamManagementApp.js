@@ -8,8 +8,7 @@ import {
 import MemberList from './components/MemberList'
 import MemberDetail from './components/MemberDetail'
 import { Router, Scene } from 'react-native-router-flux'
-import configureStore from './store.js'
-const store = configureStore()
+import { store } from './store.js'
 import { Provider } from 'react-redux'
 
 class TeamManagementApp extends Component {
