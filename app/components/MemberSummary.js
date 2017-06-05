@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
 class MemberSummary extends Component {
 	constructor(props) {
     super(props)
-    this.handleSelection = () => this.props.handleSelection(this.props.memberDetails)
+    this.handleSelection = () => this.props.handleSelection(this.props.memberDetails, this.props.index)
   }
   render () {
     const { firstName = '', lastName = '', role = '', emailId = '', phoneNo = '' } = this.props.memberDetails
@@ -70,6 +70,7 @@ class MemberSummary extends Component {
 }
 MemberSummary.propTypes = {
   handleSelection: React.PropTypes.func.isRequired,
+  index: React.PropTypes.func.isRequired,
 	memberDetails: React.PropTypes.object.isRequired,
 }
 module.exports =  MemberSummary

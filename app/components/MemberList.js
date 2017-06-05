@@ -45,6 +45,8 @@ class MemberList extends Component {
 		this.handleSelection = this.handleSelection.bind(this)
 		this.renderSeparator = this.renderSeparator.bind(this)
 		this.addMember = this.addMember.bind(this)
+		this.handleSave = this.handleSave.bind(this)
+		this.handleDelete = this.handleDelete.bind(this)
   }
 	componentDidMount () {
 		this.addMemberDummy()
@@ -62,11 +64,12 @@ class MemberList extends Component {
 
 			</View>)
   }
-	renderRow (member) {
+	renderRow (member, section, index) {
 		return (
 			<MemberSummary
 				memberDetails={ member }
 				handleSelection={ this.handleSelection }
+				index={ index }
 			/>
 	)
 	}
@@ -89,15 +92,44 @@ class MemberList extends Component {
 	renderSeparator () {
   	return (<Separator/>)
 	}
-	handleSelection (member) {
-		Actions.detail({ memberDetails: member })
+	handleSelection (member, index) {
+		Actions.detail({ memberDetails: member, handleDelete: this.handleDelete, handleSave: this.handleSave, index })
 	}
 	addMember () {
-		Actions.detail( { memberDetails: '' })
+		Actions.detail( { memberDetails: '', handleSave: this.handleSave })
+	}
+	handleDelete (index) {
+		const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+		let { members } = this.state
+		members.splice(index, 1)
+		this.setState({
+			members,
+			dataSource: dataSource.cloneWithRows(members)
+		})
+	}
+	handleSave (member, index) {
+		alert(index)
+		if (index) {
+			const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+			let { members } = this.state
+			members[index] = member
+			this.setState({
+				members,
+				dataSource: dataSource.cloneWithRows(members)
+			})
+		}else{
+			const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+			const list = this.state.members.concat([member])
+			this.setState({
+				members: list,
+				dataSource: dataSource.cloneWithRows(list),
+			})
+		}
 	}
 	addMemberDummy () {
 		const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		this.setState({dataSource: dataSource.cloneWithRows([{firstName:'fName',lastName:'lastName',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'default'},{firstName:'First',lastName:'last',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'admin'}])})
+		const list = [{firstName:'fName',lastName:'lastName',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'default'},{firstName:'First',lastName:'last',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'admin'}]
+		this.setState({members: list, dataSource: dataSource.cloneWithRows(list)})
 	}
 }
 

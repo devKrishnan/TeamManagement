@@ -23,16 +23,26 @@ const width = Dimensions.get('window')
 
 const marginOffset = 16
 const memberInfo = {}
+const regular = 'regular'
+const admin = 'admin'
+const roleRegular = 0
+const roleAdmin = 1
 //const addMember = { header: [ header ], info: [ 'firstName', 'lastName', emailID, phoneNo ], role: [ regular, admin ], stop }
 class MemberDetail extends Component {
   constructor (props) {
     super(props)
+    const { firstName = '', lastName = '', emailId = '', phoneNo = '', role = 'regular' } = props.memberDetails
     this.state = {
-            role: 0
+            role: role === regular ? roleRegular : roleAdmin,
+            firstName,
+            lastName,
+            phoneNo,
+            emailId,
     }
     this.handleClose = this.handleClose.bind(this)
     this.handleSave = this.handleSave.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
+    this.handleOnPress = this.handleOnPress.bind(this)
   }
 
   render () {
@@ -77,9 +87,9 @@ class MemberDetail extends Component {
 
           <TextInput
             editable
-            value={ this.props.memberDetails.firstName }
+            value={ this.state.firstName }
             style={ styles.textField }
-            onChangeText={(text) => { memberInfo.firstName = text }}
+            onChangeText={ (text) => this.setState ({ firstName: text }) }
             placeholder='Enter First Name'
             clearButtonMode='while-editing'
           />
@@ -87,9 +97,9 @@ class MemberDetail extends Component {
 
           <TextInput
             editable
-            value={ this.props.memberDetails.lastName }
+            value={ this.state.lastName }
             style={ styles.textField }
-            onChangeText={(text) => memberInfo.lastName = text }
+            onChangeText={(text) => this.setState ({ lastName: text }) }
             placeholder='Enter Last Name'
             clearButtonMode='while-editing'
           />
@@ -97,17 +107,17 @@ class MemberDetail extends Component {
 
           <TextInput
             editable
-            value={ this.props.memberDetails.emailId }
+            value={ this.state.emailId }
             style={ styles.textField }
-            onChangeText={(text) => memberInfo.emailId = text }
+            onChangeText={(text) => this.setState ({ emailId: text }) }
             placeholder='Enter Email Id'
             clearButtonMode='while-editing'
           />
           <TextInput
             editable
-            value={ this.props.memberDetails.phoneNo }
+            value={ this.state.phoneNo }
             style={ [ styles.textField, { marginBottom: 10 } ] }
-            onChangeText={(text) => memberInfo.phoneNo = text }
+            onChangeText={(text) => this.setState ({ phoneNo: text }) }
             placeholder='Enter Phone No'
             clearButtonMode='while-editing'
           />
@@ -124,7 +134,7 @@ class MemberDetail extends Component {
             <RadioButton
               currentValue={ this.state.role }
               value={ 0 }
-              onPress={ this.handleOnPress.bind(this) }
+              onPress={ this.handleOnPress }
               innerCircleColor='#0080ff'
               outerCircleColor='#0080ff'
               outerCircleSize={14}
@@ -140,7 +150,7 @@ class MemberDetail extends Component {
              <RadioButton
                 currentValue={ this.state.role }
                 value={ 1 }
-                onPress={ this.handleOnPress.bind(this) }
+                onPress={ this.handleOnPress }
                 innerCircleColor='#0080ff'
                 outerCircleColor='#0080ff'
                 outerCircleSize={14}
@@ -155,7 +165,8 @@ class MemberDetail extends Component {
     )
   }
   handleOnPress(value){
-    this.setState({role:value})
+    debugger
+    this.setState({ role: value })
   }
   renderActionSection () {
     return (<View style={ styles.actionContainer }>
@@ -174,14 +185,17 @@ class MemberDetail extends Component {
     </View>)
   }
   handleSave () {
-    if (memberInfo.phoneNo && memberInfo.firstName && memberInfo.lastName && memberInfo.emailId) {
 
+    if (this.state.phoneNo && this.state.firstName && this.state.lastName && this.state.emailId) {
+      this.props.handleSave({role: this.state.role === roleAdmin ? admin : regular ,phoneNo: this.state.phoneNo, firstName: this.state.firstName, lastName: this.state.lastName, emailId: this.state.emailId}, this.props.index )
+      Actions.pop()
     }else{
       alert('Provide all details ')
     }
   }
   handleDelete () {
-    alert('Deletion')
+    this.props.handleDelete && this.props.handleDelete()
+    Actions.pop()
   }
   handleClose () {
     Actions.pop()
@@ -269,6 +283,9 @@ const styles = StyleSheet.create({
 
 MemberDetail.propTypes = {
   memberDetails: React.PropTypes.object,
+  index: React.PropTypes.object,
+  handleDelete: React.PropTypes.func,
+  handleSave: React.PropTypes.func,
 }
 
 module.exports = MemberDetail
