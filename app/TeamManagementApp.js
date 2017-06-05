@@ -8,16 +8,21 @@ import {
 import MemberList from './components/MemberList'
 import MemberDetail from './components/MemberDetail'
 import { Router, Scene } from 'react-native-router-flux'
+import configureStore from './store.js'
+const store = configureStore()
+import { Provider } from 'react-redux'
 
 class TeamManagementApp extends Component {
   render() {
     return (
-      <Router>
-         <Scene key="root">
-           <Scene key="list" component={ MemberList } title="Members" initial hideNavBar />
-           <Scene key="detail" component={ MemberDetail } title="Member Details"  />
-         </Scene>
-       </Router>
+      <Provider store={store}>
+        <Router>
+           <Scene key="root">
+             <Scene key="list" component={ MemberList } title="Members" initial hideNavBar />
+             <Scene key="detail" component={ MemberDetail } title="Member Details"  />
+           </Scene>
+         </Router>
+       </Provider>
     );
   }
 }

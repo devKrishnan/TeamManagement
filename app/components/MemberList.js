@@ -14,6 +14,8 @@ import MemberDetail from './MemberDetail'
 import Header from './Header'
 import Separator from './Separator'
 import { Actions } from 'react-native-router-flux'
+import { showMembers, deleteMember, editMember, addMember }  from './../actions'
+import { connect } from 'react-redux'
 
 const styles = StyleSheet.create({
 	container: {
@@ -37,14 +39,13 @@ class MemberList extends Component {
     });
     this.state = {
       dataSource: dataSource,
-			members: []
     }
 
 		this.renderRow = this.renderRow.bind(this)
 		this.renderHeader = this.renderHeader.bind(this)
 		this.handleSelection = this.handleSelection.bind(this)
 		this.renderSeparator = this.renderSeparator.bind(this)
-		this.addMember = this.addMember.bind(this)
+		this.addNewMember = this.addNewMember.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 		this.handleDelete = this.handleDelete.bind(this)
   }
@@ -77,14 +78,15 @@ class MemberList extends Component {
     return oldRow !== newRow
   }
 	renderHeader () {
-		const countText = 'You have '+ this.state.members.length + ' team members'
+		const { members = [] } = this.props
+		const countText = 'You have '+ members.length + ' team members'
 		return (
 			<View style={ styles.headerContainer }>
 				<Header
 					subTitle={ countText }
 					title={ 'Team Members' }
 					actionTitle={ '+' }
-					handleEvent={ this.addMember }
+					handleEvent={ this.addNewMember }
 				/>
 			</View>
 		)
@@ -95,7 +97,7 @@ class MemberList extends Component {
 	handleSelection (member, index) {
 		Actions.detail({ memberDetails: member, handleDelete: this.handleDelete, handleSave: this.handleSave, index })
 	}
-	addMember () {
+	addNewMember () {
 		Actions.detail( { memberDetails: '', handleSave: this.handleSave })
 	}
 	handleDelete (index) {
@@ -111,26 +113,34 @@ class MemberList extends Component {
 		alert(index)
 		if (index) {
 			const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-			let { members } = this.state
-			members[index] = member
+			 this.props.addMember(member)
 			this.setState({
-				members,
-				dataSource: dataSource.cloneWithRows(members)
+				dataSource: dataSource.cloneWithRows(this.props.members)
 			})
 		}else{
 			const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-			const list = this.state.members.concat([member])
+			this.props.addMember(member)
 			this.setState({
-				members: list,
-				dataSource: dataSource.cloneWithRows(list),
+				dataSource: dataSource.cloneWithRows(this.props.members),
 			})
 		}
 	}
 	addMemberDummy () {
 		const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		const list = [{firstName:'fName',lastName:'lastName',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'default'},{firstName:'First',lastName:'last',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'admin'}]
-		this.setState({members: list, dataSource: dataSource.cloneWithRows(list)})
+		this.props.addMember({firstName:'fName',lastName:'lastName',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'default'})
+		this.props.addMember({firstName:'First',lastName:'last',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'admin'})
+		//this.setState({dataSource: dataSource.cloneWithRows(this.props.members)})
 	}
 }
+function mapStateToProps(state) {
+	debugger
+    return { members: state.members }
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    addMember: (member) => dispatch(addMember(member))
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(MemberList)
 
-module.exports =  MemberList
+// /module.exports =  MemberList

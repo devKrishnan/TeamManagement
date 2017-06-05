@@ -190,7 +190,7 @@ class MemberDetail extends Component {
       this.props.handleSave({role: this.state.role === roleAdmin ? admin : regular ,phoneNo: this.state.phoneNo, firstName: this.state.firstName, lastName: this.state.lastName, emailId: this.state.emailId}, this.props.index )
       Actions.pop()
     }else{
-      alert('Provide all details ')
+      alert('Provide all details')
     }
   }
   handleDelete () {
