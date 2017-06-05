@@ -70,7 +70,7 @@ class MemberSummary extends Component {
 }
 MemberSummary.propTypes = {
   handleSelection: React.PropTypes.func.isRequired,
-  index: React.PropTypes.func.isRequired,
+  index: React.PropTypes.string.isRequired,
 	memberDetails: React.PropTypes.object.isRequired,
 }
 module.exports =  MemberSummary

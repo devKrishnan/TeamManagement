@@ -17,6 +17,6 @@ const styles = StyleSheet.create({
 
 const Separator = props => <View style={ [ styles.separator, props.separator ] } />
 
-Separator.propTypes = { separator: React.PropTypes.object }
+Separator.propTypes = { separator: View.propTypes.style }
 
 module.exports = Separator

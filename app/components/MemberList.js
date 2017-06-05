@@ -14,10 +14,10 @@ import MemberDetail from './MemberDetail'
 import Header from './Header'
 import Separator from './Separator'
 import { Actions } from 'react-native-router-flux'
-import { showMembers, deleteMember, editMember, addMember }  from './../actions'
+import { addMember }  from './../actions'
 import { connect } from 'react-redux'
 import { store } from './../store.js'
-store.dispatch(addMember({firstName:'fName',lastName:'lastName',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'default'}))
+store.dispatch(addMember({firstName:'fName',lastName:'lastName',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'admin'}))
 store.dispatch(addMember({firstName:'First',lastName:'last',phoneNo:'96xxxxx',emailId:'kss.dad@gmail.com',role:'admin'}))
 
 const styles = StyleSheet.create({
@@ -43,17 +43,14 @@ class MemberList extends Component {
     this.state = {
       dataSource: dataSource,
     }
-
 		this.renderRow = this.renderRow.bind(this)
 		this.renderHeader = this.renderHeader.bind(this)
 		this.handleSelection = this.handleSelection.bind(this)
 		this.renderSeparator = this.renderSeparator.bind(this)
-		this.addNewMember = this.addNewMember.bind(this)
-		this.handleSave = this.handleSave.bind(this)
-		this.handleDelete = this.handleDelete.bind(this)
+		this.addMember = this.addMember.bind(this)
   }
 	componentDidMount () {
-		this.addMemberDummy()
+		this.setState({dataSource: this.state.dataSource.cloneWithRows(this.props.members)})
 	}
 	componentWillReceiveProps (nextProps) {
     if (nextProps.members !== this.props.members) {
@@ -96,7 +93,7 @@ class MemberList extends Component {
 					subTitle={ countText }
 					title={ 'Team Members' }
 					actionTitle={ '+' }
-					handleEvent={ this.addNewMember }
+					handleEvent={ this.addMember }
 				/>
 			</View>
 		)
@@ -105,37 +102,14 @@ class MemberList extends Component {
   	return (<Separator/>)
 	}
 	handleSelection (member, index) {
-		Actions.detail({ memberDetails: member, handleDelete: this.handleDelete, handleSave: this.handleSave, index })
+		Actions.detail({ memberDetails: member, index })
 	}
-	addNewMember () {
-		Actions.detail( { memberDetails: '', handleSave: this.handleSave })
-	}
-	handleDelete (index) {
-		this.props.deleteMember(Number(index))
-	}
-	handleSave (member, index) {
-		if (index) {
-			this.props.editMember(member, Number(index))
-		}else{
-			this.props.addMember(member)
-		}
-	}
-	addMemberDummy () {
-		const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
-		this.setState({dataSource: dataSource.cloneWithRows(this.props.members)})
+	addMember () {
+		Actions.detail( { memberDetails: '' })
 	}
 }
 function mapStateToProps(state) {
     return { members: state.members }
 }
-function mapDispatchToProps(dispatch) {
-  return {
-    addMember: (member) => dispatch(addMember(member)),
-		editMember: (member, index) => dispatch(editMember(member, index)),
-		deleteMember: index => dispatch(deleteMember(index)),
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(MemberList)
 
-// /module.exports =  MemberList
+export default connect(mapStateToProps)(MemberList)

@@ -18,7 +18,9 @@ import { Actions } from 'react-native-router-flux'
 import RadioButton from 'radio-button-react-native'
 import Separator from './Separator'
 import Button from './Button'
-
+import { connect } from 'react-redux'
+import { showMembers, deleteMember, editMember, addMember }  from './../actions'
+import { store } from './../store.js'
 const width = Dimensions.get('window')
 
 const marginOffset = 16
@@ -27,7 +29,6 @@ const regular = 'regular'
 const admin = 'admin'
 const roleRegular = 0
 const roleAdmin = 1
-//const addMember = { header: [ header ], info: [ 'firstName', 'lastName', emailID, phoneNo ], role: [ regular, admin ], stop }
 class MemberDetail extends Component {
   constructor (props) {
     super(props)
@@ -187,14 +188,19 @@ class MemberDetail extends Component {
   handleSave () {
 
     if (this.state.phoneNo && this.state.firstName && this.state.lastName && this.state.emailId) {
-      this.props.handleSave({role: this.state.role === roleAdmin ? admin : regular ,phoneNo: this.state.phoneNo, firstName: this.state.firstName, lastName: this.state.lastName, emailId: this.state.emailId}, this.props.index )
+      const member = {role: this.state.role === roleAdmin ? admin : regular ,phoneNo: this.state.phoneNo, firstName: this.state.firstName, lastName: this.state.lastName, emailId: this.state.emailId}
+      if (this.props.index) {
+  			this.props.editMember(member, Number(this.props.index))
+  		}else{
+  			this.props.addMember(member)
+  		}
       Actions.pop()
     }else{
       alert('Provide all details')
     }
   }
   handleDelete () {
-    this.props.handleDelete && this.props.handleDelete(this.props.index)
+    this.props.deleteMember(Number(this.props.index))
     Actions.pop()
   }
   handleClose () {
@@ -283,9 +289,16 @@ const styles = StyleSheet.create({
 
 MemberDetail.propTypes = {
   memberDetails: React.PropTypes.object,
-  index: React.PropTypes.object,
-  handleDelete: React.PropTypes.func,
-  handleSave: React.PropTypes.func,
+  index: React.PropTypes.string,
 }
-
-module.exports = MemberDetail
+function mapStateToProps(state) {
+    return { members: state.members }
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    addMember: (member) => dispatch(addMember(member)),
+		editMember: (member, index) => dispatch(editMember(member, index)),
+		deleteMember: index => dispatch(deleteMember(index)),
+  }
+}
+export default connect(()=>{return{}}, mapDispatchToProps)(MemberDetail)
