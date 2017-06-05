@@ -190,7 +190,7 @@ class MemberDetail extends Component {
     if (this.state.phoneNo && this.state.firstName && this.state.lastName && this.state.emailId) {
       const member = {role: this.state.role === roleAdmin ? admin : regular ,phoneNo: this.state.phoneNo, firstName: this.state.firstName, lastName: this.state.lastName, emailId: this.state.emailId}
       if (this.props.index) {
-  			this.props.editMember(member, Number(this.props.index))
+  			this.props.editMember(member, this.props.index)
   		}else{
   			this.props.addMember(member)
   		}
@@ -200,14 +200,14 @@ class MemberDetail extends Component {
     }
   }
   handleDelete () {
-    this.props.deleteMember(Number(this.props.index))
+    this.props.deleteMember(this.props.index)
     Actions.pop()
   }
   handleClose () {
     Actions.pop()
   }
   isEditProfileDetails () {
-    return Boolean(this.props.memberDetails)
+    return Object.keys(this.props.memberDetails).length > 0
   }
 }
 
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
 
 MemberDetail.propTypes = {
   memberDetails: React.PropTypes.object,
-  index: React.PropTypes.string,
+  index: React.PropTypes.number,
 }
 function mapStateToProps(state) {
     return { members: state.members }

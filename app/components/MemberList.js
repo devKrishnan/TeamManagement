@@ -102,10 +102,10 @@ class MemberList extends Component {
   	return (<Separator/>)
 	}
 	handleSelection (member, index) {
-		Actions.detail({ memberDetails: member, index })
+		Actions.detail({ memberDetails: member, index: Number(index) })
 	}
 	addMember () {
-		Actions.detail( { memberDetails: '' })
+		Actions.detail( { memberDetails: {} })
 	}
 }
 function mapStateToProps(state) {
