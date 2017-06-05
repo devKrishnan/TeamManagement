@@ -169,26 +169,27 @@ class MemberDetail extends Component {
     this.setState({ role: value })
   }
   renderActionSection () {
-    return (<View style={ styles.actionContainer }>
-      <Button
-        name={ 'Save' }
-        textStyle={ styles.saveButtonText }
-        buttonViewStyle={ styles.saveButtonView }
-        handleEvent={ this.handleSave }
-      />
+    const containerStyle = this.isEditProfileDetails() ? styles.actionContainer : [ styles.actionContainer, { justifyContent: 'flex-end' } ]
+    return (<View style={ containerStyle }>
+
       { this.isEditProfileDetails() ? <Button
         name={ 'Delete' }
         textStyle={ styles.deleteButtonText }
         buttonViewStyle={ styles.deleteButtonView }
         handleEvent={ this.handleDelete }
       /> : null }
+      <Button
+        name={ 'Save' }
+        textStyle={ styles.saveButtonText }
+        buttonViewStyle={ styles.saveButtonView }
+        handleEvent={ this.handleSave }
+      />
     </View>)
   }
   handleSave () {
-
     if (this.state.phoneNo && this.state.firstName && this.state.lastName && this.state.emailId) {
       const member = {role: this.state.role === roleAdmin ? admin : regular ,phoneNo: this.state.phoneNo, firstName: this.state.firstName, lastName: this.state.lastName, emailId: this.state.emailId}
-      if (this.props.index) {
+      if (this.props.index >= 0) {
   			this.props.editMember(member, this.props.index)
   		}else{
   			this.props.addMember(member)
