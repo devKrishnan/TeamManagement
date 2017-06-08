@@ -189,7 +189,7 @@ class MemberDetail extends Component {
   handleSave () {
     if (this.state.phoneNo && this.state.firstName && this.state.lastName && this.state.emailId) {
       const member = {role: this.state.role === roleAdmin ? admin : regular ,phoneNo: this.state.phoneNo, firstName: this.state.firstName, lastName: this.state.lastName, emailId: this.state.emailId}
-      if (this.props.index >= 0) {
+      if (this.isEditProfileDetails() && this.props.index >= 0) {
   			this.props.editMember(member, this.props.index)
   		}else{
   			this.props.addMember(member)
