@@ -37,35 +37,24 @@ const styles = StyleSheet.create({
 class MemberList extends Component {
 	constructor(props) {
     super(props)
-    let dataSource = new ListView.DataSource({
+    this.dataSource = new ListView.DataSource({
       rowHasChanged: this._rowHasChanged,
-    });
-    this.state = {
-      dataSource: dataSource,
-    }
+    })
 		this.renderRow = this.renderRow.bind(this)
 		this.renderHeader = this.renderHeader.bind(this)
 		this.handleSelection = this.handleSelection.bind(this)
 		this.renderSeparator = this.renderSeparator.bind(this)
 		this.addMember = this.addMember.bind(this)
   }
-	componentDidMount () {
-		this.setState({dataSource: this.state.dataSource.cloneWithRows(this.props.members)})
-	}
-	componentWillReceiveProps (nextProps) {
-    if (nextProps.members !== this.props.members) {
-			this.setState({
-				dataSource: this.state.dataSource.cloneWithRows(nextProps.members)
-			})
-    }
-  }
+
   render (){
+		const dataSource = this.dataSource.cloneWithRows(this.props.members)
     return (
 			<View style={ styles.container }>
 				{ this.renderHeader() }
 				<ListView
 					style={ styles.listView }
-					dataSource={this.state.dataSource}
+					dataSource={ dataSource }
 					renderRow={ this.renderRow }
 					renderSeparator={ this.renderSeparator }
 				/>
