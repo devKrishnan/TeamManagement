@@ -12,24 +12,18 @@ import { store } from './store.js'
 import { Provider } from 'react-redux'
 
 class TeamManagementApp extends Component {
-  render() {
+  render () {
     return (
       <Provider store={store}>
         <Router>
            <Scene key="root">
              <Scene key="list" component={ MemberList } title="Members" initial hideNavBar />
-             <Scene key="detail" component={ MemberDetail } title="Member Details"  />
+             <Scene key="detail" component={ MemberDetail } title="Member Details" />
            </Scene>
          </Router>
        </Provider>
-    );
+    )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default TeamManagementApp
