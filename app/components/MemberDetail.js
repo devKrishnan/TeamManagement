@@ -33,13 +33,11 @@ class MemberDetail extends Component {
   constructor (props) {
     super(props)
     const { firstName = '', lastName = '', emailId = '', phoneNo = '', role = 'regular' } = props.memberDetails
-    this.state = {
-            role: role === regular ? roleRegular : roleAdmin,
-            firstName,
-            lastName,
-            phoneNo,
-            emailId,
-    }
+    this.role =  role === regular ? roleRegular : roleAdmin
+    this.firstName = firstName
+    this.lastName = lastName
+    this.phoneNo = phoneNo
+    this.emailId = emailId
     this.handleClose = this.handleClose.bind(this)
     this.handleSave = this.handleSave.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
@@ -88,9 +86,9 @@ class MemberDetail extends Component {
 
           <TextInput
             editable
-            value={ this.state.firstName }
+            defaultValue={ this.firstName }
             style={ styles.textField }
-            onChangeText={ (text) => this.setState ({ firstName: text }) }
+            onChangeText={ (text) => this.firstName = text  }
             placeholder='Enter First Name'
             clearButtonMode='while-editing'
           />
@@ -98,27 +96,26 @@ class MemberDetail extends Component {
 
           <TextInput
             editable
-            value={ this.state.lastName }
+            defaultValue={ this.lastName }
             style={ styles.textField }
-            onChangeText={(text) => this.setState ({ lastName: text }) }
+            onChangeText={(text) => this.lastName = text }
             placeholder='Enter Last Name'
             clearButtonMode='while-editing'
           />
 
-
           <TextInput
             editable
-            value={ this.state.emailId }
+            defaultValue={ this.emailId }
             style={ styles.textField }
-            onChangeText={(text) => this.setState ({ emailId: text }) }
+            onChangeText={(text) => this.emailId = text  }
             placeholder='Enter Email Id'
             clearButtonMode='while-editing'
           />
           <TextInput
             editable
-            value={ this.state.phoneNo }
+            defaultValue={ this.phoneNo }
             style={ [ styles.textField, { marginBottom: 10 } ] }
-            onChangeText={(text) => this.setState ({ phoneNo: text }) }
+            onChangeText={(text) => this.phoneNo = text }
             placeholder='Enter Phone No'
             clearButtonMode='while-editing'
           />
@@ -133,7 +130,7 @@ class MemberDetail extends Component {
           <Text style={ styles.sectionTitle }>Roles</Text>
           <View style={ styles.radioButtonContainer }>
             <RadioButton
-              currentValue={ this.state.role }
+              currentValue={ this.role }
               value={ 0 }
               onPress={ this.handleOnPress }
               innerCircleColor='#0080ff'
@@ -149,7 +146,7 @@ class MemberDetail extends Component {
           </View>
           <View style={ styles.radioButtonContainer }>
              <RadioButton
-                currentValue={ this.state.role }
+                currentValue={ this.role }
                 value={ 1 }
                 onPress={ this.handleOnPress }
                 innerCircleColor='#0080ff'
@@ -165,8 +162,8 @@ class MemberDetail extends Component {
         </View>
     )
   }
-  handleOnPress(value){
-    this.setState({ role: value })
+  handleOnPress (value) {
+    this.role = value
   }
   renderActionSection () {
     const containerStyle = this.isEditProfileDetails() ? styles.actionContainer : [ styles.actionContainer, { justifyContent: 'flex-end' } ]
@@ -187,8 +184,8 @@ class MemberDetail extends Component {
     </View>)
   }
   handleSave () {
-    if (this.state.phoneNo && this.state.firstName && this.state.lastName && this.state.emailId) {
-      const member = {role: this.state.role === roleAdmin ? admin : regular ,phoneNo: this.state.phoneNo, firstName: this.state.firstName, lastName: this.state.lastName, emailId: this.state.emailId}
+    if (this.phoneNo && this.firstName && this.lastName && this.emailId) {
+      const member = {role: this.role === roleAdmin ? admin : regular ,phoneNo: this.phoneNo, firstName: this.firstName, lastName: this.lastName, emailId: this.emailId}
       if (this.isEditProfileDetails() && this.props.index >= 0) {
   			this.props.editMember(member, this.props.index)
   		}else{
