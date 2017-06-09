@@ -33,7 +33,10 @@ class MemberDetail extends Component {
   constructor (props) {
     super(props)
     const { firstName = '', lastName = '', emailId = '', phoneNo = '', role = 'regular' } = props.memberDetails
-    this.role =  role === regular ? roleRegular : roleAdmin
+    //this.role =  role === regular ? roleRegular : roleAdmin
+    this.state = {
+           role: role === regular ? roleRegular : roleAdmin
+    }
     this.firstName = firstName
     this.lastName = lastName
     this.phoneNo = phoneNo
@@ -130,7 +133,7 @@ class MemberDetail extends Component {
           <Text style={ styles.sectionTitle }>Roles</Text>
           <View style={ styles.radioButtonContainer }>
             <RadioButton
-              currentValue={ this.role }
+              currentValue={ this.state.role  }
               value={ 0 }
               onPress={ this.handleOnPress }
               innerCircleColor='#0080ff'
@@ -146,7 +149,7 @@ class MemberDetail extends Component {
           </View>
           <View style={ styles.radioButtonContainer }>
              <RadioButton
-                currentValue={ this.role }
+                currentValue={ this.state.role  }
                 value={ 1 }
                 onPress={ this.handleOnPress }
                 innerCircleColor='#0080ff'
@@ -163,7 +166,7 @@ class MemberDetail extends Component {
     )
   }
   handleOnPress (value) {
-    this.role = value
+    this.setState({ role: value })
   }
   renderActionSection () {
     const containerStyle = this.isEditProfileDetails() ? styles.actionContainer : [ styles.actionContainer, { justifyContent: 'flex-end' } ]
@@ -185,7 +188,7 @@ class MemberDetail extends Component {
   }
   handleSave () {
     if (this.phoneNo && this.firstName && this.lastName && this.emailId) {
-      const member = {role: this.role === roleAdmin ? admin : regular ,phoneNo: this.phoneNo, firstName: this.firstName, lastName: this.lastName, emailId: this.emailId}
+      const member = {role: this.state.role === roleAdmin ? admin : regular ,phoneNo: this.phoneNo, firstName: this.firstName, lastName: this.lastName, emailId: this.emailId}
       if (this.isEditProfileDetails() && this.props.index >= 0) {
   			this.props.editMember(member, this.props.index)
   		}else{
