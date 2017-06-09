@@ -89,7 +89,7 @@ class MemberDetail extends Component {
 						editable
 						defaultValue={ this.firstName }
 						style={ styles.textField }
-						onChangeText={ (text) => this.firstName = text  }
+						onChangeText={ text => { this.firstName = text } }
 						placeholder='Enter First Name'
 						clearButtonMode='while-editing'
 					/>
@@ -97,7 +97,7 @@ class MemberDetail extends Component {
 						editable
 						defaultValue={ this.lastName }
 						style={ styles.textField }
-						onChangeText={(text) => this.lastName = text }
+						onChangeText={ text => { this.lastName = text } }
 						placeholder='Enter Last Name'
 						clearButtonMode='while-editing'
 					/>
@@ -106,7 +106,7 @@ class MemberDetail extends Component {
 						editable
 						defaultValue={ this.emailId }
 						style={ styles.textField }
-						onChangeText={(text) => this.emailId = text  }
+						onChangeText={ text => { this.emailId = text } }
 						placeholder='Enter Email Id'
 						clearButtonMode='while-editing'
 					/>
@@ -114,7 +114,7 @@ class MemberDetail extends Component {
 						editable
 						defaultValue={ this.phoneNo }
 						style={ [ styles.textField, { marginBottom: 10 } ] }
-						onChangeText={(text) => this.phoneNo = text }
+						onChangeText={ text => { this.phoneNo = text } }
 						placeholder='Enter Phone No'
 						clearButtonMode='while-editing'
 					/>

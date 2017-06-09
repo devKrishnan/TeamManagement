@@ -1,9 +1,7 @@
 import { ADD_MEMBER, EDIT_MEMBER, DELETE_MEMBER } from './actions'
 import { combineReducers } from 'redux'
 
-const initialState = {
-  members: []
-}
+const initialState = []
 
 const members = (state = initialState, action) => {
   switch (action.type) {
